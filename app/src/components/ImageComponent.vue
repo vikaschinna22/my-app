@@ -32,11 +32,11 @@ export default{
 
 img{
   /* border-radius: 7%; */
-  object-fit:fill;
+  object-fit:cover;
   /* display:inline-block; */
   /* object-position:unset; */
   /* object-fit:cover; */
-  width:auto;
+  width:250px;
   height:100%;
   text-align: center;
   

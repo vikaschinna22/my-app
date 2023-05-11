@@ -16,7 +16,7 @@ import pickle
 app = Flask(__name__)
 
 CORS(app)
-base = "http://localhost:5000/"
+base = "http://localhost:5000"
 
 UPLOAD_FOLDER = 'images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -62,6 +62,30 @@ def getAllImages():
         print("get images error")
     return "error"
 
+@app.route('/deleteImages/',methods=['POST'])
+def deleteImages():
+    global db_file
+    con = None
+    if request.method == 'POST':
+        pics = []
+        try:
+            con = sqlite3.connect(db_file)
+            cur = con.cursor()
+            data = request.json
+            for img in data['Images']:
+                print(img)
+                print(cur.execute(f""" select img_id from g_table  """).fetchall())
+                cur.execute(f""" delete from g_table where img_id = '{img}' """)
+                print(cur.execute(f""" select img_id from g_table  """).fetchall())
+                cur.execute(f""" delete from g_to_clu_rel where img_id = '{img}' """)
+                # print(cur.execute(f'''select img_id from g_table''').fetchall())
+                # print(cur.execute(f''' select * from  g_to_clu_rel where img_id = "{img}"''').fetchall())
+                con.commit()
+                con.close()
+            return 'sucess'
+        except Error as e:
+            print(e)
+        
 
 @app.route('/images/<imge>')
 def getImage(imge):

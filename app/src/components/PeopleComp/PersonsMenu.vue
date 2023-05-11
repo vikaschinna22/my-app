@@ -9,6 +9,7 @@
 <script>
 import { usePhotoStore } from '@/store/PhotoStore';
 import PeopleComponet from '@/components/PeopleComp/PeopleComponet.vue';
+import { storeToRefs } from 'pinia';
 export default{
     setup(){
         const photostore = usePhotoStore()
@@ -16,8 +17,9 @@ export default{
             photostore
         }
     },data(){
+        const {clusters} = storeToRefs(this.photostore)
         return{
-            imgs:this.photostore.clusters
+            imgs:clusters
         }
     },
     computed:{

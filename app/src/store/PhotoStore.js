@@ -12,9 +12,10 @@ export const usePhotoStore=defineStore('PhotoStore',{
     },
     actions:{
         async updatePhotos(){
+            console.log('update photo')
             try{
                 const res= await axios.get("http://localhost:5000/")
-                // console.log(res.data)
+                // console.log(typeof res.data.imgs)
                 this.allphotos=res.data.imgs
                 this.clusters=res.data.clusters
                 this.clusterImages=res.data.clusterImages

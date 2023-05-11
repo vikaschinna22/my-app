@@ -24,11 +24,23 @@
 <script>
 import axios from 'axios';
 import { usePhotoStore } from './store/PhotoStore.js';
-export default{  
-  data(){
+
+export default{ 
+  setup(){
     const usephotostore=usePhotoStore()
-    return {usephotostore,renderc:true};
+    return {
+      usephotostore
+    }
   },
+  data(){
+    const {updatePhotos} = this.usephotostore
+    return {updatePhotos};
+  },
+  async mounted(){
+    // console.log('hii')
+    await this.updatePhotos()
+    // console.log(this.data)
+  }, 
   methods:{
       async getImages(){
         let imgupload = this.$refs.images;
@@ -72,7 +84,7 @@ export default{
 }
 
 nav {
-  padding: 30px;
+  padding: 10px;
 }
 
 nav a {

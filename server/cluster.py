@@ -83,6 +83,7 @@ def cluster():
         con = sqlite3.connect(db_file)
         cur = con.cursor()
         # print(cur.execute('select * from clu_table').fetchall())
+        cur.execute("delete from g_to_clu_rel")
         cur.execute("delete from clu_table")
         # print("truncate")
         # print(cur.execute('select * from clu_table').fetchall())
