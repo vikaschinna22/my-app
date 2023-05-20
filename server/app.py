@@ -62,7 +62,8 @@ def getAllImages():
         print("get images error")
     return "error"
 
-@app.route('/deleteImages/',methods=['POST'])
+
+@app.route('/deleteImages/', methods=['POST'])
 def deleteImages():
     global db_file
     con = None
@@ -72,20 +73,40 @@ def deleteImages():
             con = sqlite3.connect(db_file)
             cur = con.cursor()
             data = request.json
+            # load cluster
+            file1 = open('enc.pkl', 'rb')
+            clust = pickle.load(file1)
+            # end
             for img in data['Images']:
                 print(img)
                 print(cur.execute(f""" select img_id from g_table  """).fetchall())
-                cur.execute(f""" delete from g_table where img_id = '{img}' """)
+                cur.execute(
+                    f""" delete from g_table where img_id = '{img}' """)
                 print(cur.execute(f""" select img_id from g_table  """).fetchall())
-                cur.execute(f""" delete from g_to_clu_rel where img_id = '{img}' """)
+                cur.execute(
+                    f""" delete from g_to_clu_rel where img_id = '{img}' """)
                 # print(cur.execute(f'''select img_id from g_table''').fetchall())
                 # print(cur.execute(f''' select * from  g_to_clu_rel where img_id = "{img}"''').fetchall())
-                con.commit()
-                con.close()
+                # deleting the entries
+            con.commit()
+            con.close()
+            # v changes 20-05
+            print(len(clust))
+            for path in data['Images']:
+                clust = [i for i in clust if i['imagePath'].split(
+                    '/')[1] != path]
+            # print(clust)
+            file1.close()
+            print(len(clust))
+            file1 = open('enc.pkl', 'wb')
+            pickle.dump(clust, file1)
+            file1.close()
+            cluster.cluster()
+            # end changes
             return 'sucess'
         except Error as e:
             print(e)
-        
+
 
 @app.route('/images/<imge>')
 def getImage(imge):
