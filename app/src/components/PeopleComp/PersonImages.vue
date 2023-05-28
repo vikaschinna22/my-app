@@ -21,7 +21,9 @@ export default{
             const route=this.$route.path.split("/").filter(r=> r!='')
             const f_id = route.at(-1)
             // console.log(f_id)
-            // console.log(this.clu_imgs[f_id])
+            // console.log(this.clu_imgs[f_id]
+            if(!(f_id  in this.clu_imgs ))
+                router.replace('/search')
             return this.clu_imgs[f_id]
         }
     }    
