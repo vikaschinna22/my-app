@@ -29,18 +29,83 @@ export default {
     return {
       allphotos,
       getAllPhotos,
-      updatePhotos
+      updatePhotos,
+      selectImages:[],
+      chkboxshow:false,
+      fullScreenImg:false,
+      curImg:null,
+      fullScreenImgidx:-1
+    }
+  },
+  watch:{
+    selectImages(newselectImages){
+      if(newselectImages.length>=1)this.chkboxshow=true;
+      else this.chkboxshow=false;
     }
   },
   computed:{
     getimgs(){
+      //console.log(this.allphotos)
       return this.allphotos
     }
   },
   async mounted(){
     console.log('hii')
     await this.updatePhotos()
+    //console.log(this.allphotos)
     // console.log(this.data)
+  },
+  methods:{
+    handleLabel(e){
+      if(e.target.nodeName === 'IMG' && this.selectImages.length<=0) 
+        e.preventDefault();
+      // console.log(e.target.nodeName) 
+    },
+    handleImgClick(e){
+      if(this.selectImages.length >=1)return;
+      // console.log(e.target.nodeName)
+      this.fullScreenImg=true;
+      this.curImg=e.target.src
+      const k= Object.entries(this.allphotos).find((item)=>  item[1]===e.target.src)
+      this.fullScreenImgidx = k[0]
+      // console.log(typeof this.photostore.allphotos)
+    },
+    handleClose(){
+      this.fullScreenImg=false
+      this.curImg=null
+      this.fullScreenImgidx=-1
+    },
+    handleRight(){
+      // console.log(this.allphotos.length)
+      this.fullScreenImgidx = (this.fullScreenImgidx + 1)%this.allphotos.length
+      this.curImg = this.allphotos[this.fullScreenImgidx]
+    },
+    handleLeft(){
+      this.fullScreenImgidx = (this.fullScreenImgidx - 1+ this.allphotos.length)%this.allphotos.length
+      this.curImg = this.allphotos[this.fullScreenImgidx]
+    },
+    handleDelBack(){
+      // console.log(this.selectImages)
+      this.selectImages = []
+    },
+    handleDel(){
+      const Ids= this.selectImages.map((item)=>{
+        const ele = item.split('/')
+        // console.log(ele)
+        return ele.at(-1)
+      })
+      const data={
+        Images:Ids
+      }
+      axios.post('http://localhost:5000/deleteImages/',data).then(res=>{
+        console.log(res)
+        this.updatePhotos()
+        this.handleDelBack()
+      }).catch(err=>{
+        console.log(err)
+      })
+
+    },
   },
   
 }

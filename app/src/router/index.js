@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HelloWorld from '@/components/HelloWorld.vue'
 import PersonImages from "@/components/PeopleComp/PersonImages.vue"
+import AlbumsCreate from'@/components/AlbumComponenets/createA.vue'
+import AlbumView from'@/components/AlbumComponenets/AlbumView.vue';
 const routes = [
   {
     path: '/',
@@ -16,6 +18,18 @@ const routes = [
     path:'/person/:pid',
     name:"person",
     component:PersonImages
+  }
+  ,
+  {
+    path:'/AlbumCreate',
+    name:"album",
+    component:AlbumsCreate
+
+  },
+  {
+    path:'/Album/:aid',
+    name:'albumname',
+    component:AlbumView
   }
 ]
 

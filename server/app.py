@@ -21,6 +21,8 @@ base = "http://localhost:5000/"
 UPLOAD_FOLDER = 'images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+album = 'alk.pkl'
+
 
 @app.route('/')
 def getAllImages():
@@ -97,10 +99,46 @@ def imageUpload():
         return "success"
 
 
+@app.route("/createAlbum/", methods=["POST"])
+def createAlbum():
+    if request.method == "POST":
+        file1 = open(album, 'rb')
+        alb = {}
+        if os.path.getsize(album) > 0:
+            alb = pickle.load(file1)
+        print(alb)
+        data = request.json
+        for i in data['Img']:
+            print(i)
+        print(data['title'])
+        print(data['title'] in alb)
+        if data['title'] in alb:
+            return 'already exists'
+        alb[data['title']] = data['Img']
+
+        file1.close()
+        file1 = open(album, 'wb')
+        pickle.dump(alb, file1)
+    return 'success'
+
+
+@app.route('/getalb/')
+def getalb():
+    if not os.path.exists(album):
+        with open(album, 'wb') as file:
+            pickle.dump({}, file)
+    file1 = open(album, 'rb')
+    alb = pickle.load(file1)
+    return jsonify({"var": alb})
+
+
 if __name__ == "__main__":
     if not os.path.exists(cluster.enc):
         with open(cluster.enc, 'wb') as file:
             pickle.dump([], file)
+    if not os.path.exists(album):
+        with open(album, 'wb') as file:
+            pickle.dump({}, file)
     # cluster.cluster()
     db_init()
 
