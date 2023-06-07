@@ -20,6 +20,7 @@ base = "http://localhost:5000"
 
 UPLOAD_FOLDER = 'images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+album = 'alk.pkl'
 
 
 @app.route('/')
@@ -34,21 +35,15 @@ def getAllImages():
 
         cur.execute('select clu_id from clu_table')
         clu = [f[0] for f in cur.fetchall()]
-        # print(clu)
         clu_lbl = []
         cluImgs = {}
         for c in clu:
-            # print("before c\n",c)
-            # print(cur.execute(f'select img_id from g_to_clu_rel where clu_id="face1"').fetchall())
-            cur.execute(
-                f'''select img_id from g_to_clu_rel where clu_id="{c}"''')
-            # print('after c')
+            cur.execute(f'''select img_id from g_to_clu_rel where clu_id="{c}"''')
             cimgs = [base+'/images/'+f[0] for f in cur.fetchall()]
             clu_lbl.append({
-                'p_id': c, 'link': cimgs[0]
+                'p_id': c, 'link': (base+'/faces/'+c+'.jpeg')
             })
             cluImgs[c] = cimgs
-            # print(cimgs)
 
         con.close()
         res = jsonify({
@@ -56,7 +51,6 @@ def getAllImages():
             "clusters": clu_lbl,
             "clusterImages": cluImgs
         })
-        # print(res)
         return res
     except:
         print("get images error")
@@ -78,7 +72,7 @@ def deleteImages():
             clust = pickle.load(file1)
             # end
             for img in data['Images']:
-                print(img)
+                # print(img)
                 print(cur.execute(f""" select img_id from g_table  """).fetchall())
                 cur.execute(
                     f""" delete from g_table where img_id = '{img}' """)
@@ -91,7 +85,7 @@ def deleteImages():
             con.commit()
             con.close()
             # v changes 20-05
-            print(len(clust))
+            # print(len(clust))
             for path in data['Images']:
                 clust = [i for i in clust if i['imagePath'].split(
                     '/')[1] != path]
@@ -111,6 +105,11 @@ def deleteImages():
 @app.route('/images/<imge>')
 def getImage(imge):
     return send_file('images\\'+imge)
+
+
+@app.route('/faces/<imge>')
+def getFace(imge):
+    return send_file('faces\\'+imge)
 
 
 @app.route('/imageupload/', methods=['POST'])
@@ -142,10 +141,47 @@ def imageUpload():
         return "success"
 
 
+@app.route("/createAlbum/", methods=["POST"])
+def createAlbum():
+    if request.method == "POST":
+        file1 = open(album, 'rb')
+        alb = {}
+        if os.path.getsize(album) > 0:
+            alb = pickle.load(file1)
+        print(alb)
+        data = request.json
+        for i in data['Img']:
+            print(i)
+        print(data['title'])
+        print(data['title'] in alb)
+        if data['title'] in alb:
+            return 'already exists'
+        alb[data['title']] = data['Img']
+        print(album)
+        file1.close()
+        file1 = open(album, 'wb')
+        pickle.dump(alb, file1)
+    return 'success'
+
+
+@app.route('/getalb/')
+def getalb():
+    if not os.path.exists(album):
+        with open(album, 'wb') as file:
+            pickle.dump({}, file)
+    file1 = open(album, 'rb')
+    alb = pickle.load(file1)
+    print(alb)
+    return jsonify({"var": alb})
+
+
 if __name__ == "__main__":
     if not os.path.exists(cluster.enc):
         with open(cluster.enc, 'wb') as file:
             pickle.dump([], file)
+    if not os.path.exists(album):
+        with open(album, 'wb') as file:
+            pickle.dump({}, file)
     # cluster.cluster()
     db_init()
 

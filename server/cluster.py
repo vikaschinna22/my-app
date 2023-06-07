@@ -6,7 +6,7 @@ import cv2
 import face_recognition
 from sklearn.cluster import DBSCAN
 from imutils import build_montages
-
+import shutil
 import pickle
 
 from db import *
@@ -17,11 +17,11 @@ enc = "enc.pkl"
 def addImages(imglist):
     data = None
     try:
-        print("addImages\n\n")
+        # print("addImages\n\n")
         with open(enc, 'rb') as file:
             data = pickle.load(file)
-        print("imglist\n", imglist)
-        print("data\n", data)
+        # print("imglist\n", imglist)
+        # print("data\n", data)
         c = 0
         flag = False
         for f in imglist:
@@ -35,12 +35,14 @@ def addImages(imglist):
             boxes = face_recognition.face_locations(rgb, model="hog")
 
             encodings = face_recognition.face_encodings(rgb, boxes)
+            print(boxes)
             d = [{"imagePath": p, "loc": box, "encoding": enc}
                  for (box, enc) in zip(boxes, encodings)]
+
             if (len(d)):
                 data.extend(d)
                 flag = True
-        print("data 2 var\n", data)
+        # print("data 2 var\n", data)
         if flag:
             with open(enc, 'wb') as file:
                 pickle.dump(data, file)
@@ -51,10 +53,12 @@ def addImages(imglist):
 
 def cluster():
     try:
+        shutil.rmtree('faces')	
+        os.mkdir('faces')
         data = None
         with open(enc, 'rb') as file:
             data = pickle.load(file)
-        print("cluster \n\n")
+        # print("cluster \n\n")
         data_arr = np.array(data)
         encodings_arr = [item["encoding"] for item in data_arr]
 
@@ -66,20 +70,55 @@ def cluster():
         # c =[]
         cnt = 0
         clu = {}
+        
         for labelID in labelIDs:
             idxs = np.where(cluster.labels_ == labelID)[0]
             t = []
+            x,y,w,h=0,0,0,0
+            f_idx=-1
+            f=True
+            img = None
             for i in idxs:
                 if(labelID != -1):
+                    if(f):
+                        f=False
+                        x,y,w,h=data_arr[i]['loc']
+                        f_idx = i
+                        # print(data_arr[i]['imagePath'])
+                        img = cv2.imread(data_arr[i]['imagePath']).copy()
+                        # cv2.imshow(data_arr[i]['imagePath'], img)  
+                        # cv2.waitKey(0)                      
                     t.append(data_arr[i]["imagePath"])
             if(labelID != -1):
+                # print(x,y,w,h,f_idx)
+                # image = face_recognition.load_image_file(data_arr[f_idx]['imagePath'])
+                # img = Image.fromarray(image, 'RGB').copy()
+                # img_cropped = img.crop((
+                #     h,x,y,w
+                # ))
+                # img.save('')
+                # img_cropped.show()
+
+                # cv2.rectangle(img, (h, x),(y, w), (255,0,255), 2)
+                # print(img)
+                # cv2.imshow('img',img[x:w-x,y:h-y])
+                # cv2.waitKey(0)
+
                 cnt += 1
                 clu["face"+str(cnt)] = []
                 for tp in t:
                     s = tp.split('/')
                     clu['face'+str(cnt)].append(s[1])
+
+                image = face_recognition.load_image_file(data_arr[f_idx]['imagePath'])
+                img = Image.fromarray(image, 'RGB').copy()
+                img_cropped = img.crop((
+                    h,x,y,w
+                ))
+                img_cropped.save(f'faces/face{str(cnt)}.jpeg')
+                # img_cropped.show()
                 # c.append(t)
-        print(clu)
+        # print(clu)
         con = sqlite3.connect(db_file)
         cur = con.cursor()
         # print(cur.execute('select * from clu_table').fetchall())
@@ -100,7 +139,7 @@ def cluster():
         con.close()
         make_id()
     except:
-        print("clu error")
+        print('clu error')
 
 
 cluster()

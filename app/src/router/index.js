@@ -1,21 +1,36 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue'
-import PersonImages from "@/components/PeopleComp/PersonImages.vue"
+import HomePage from '@/pages/HomePage.vue'
+import PersonImagesPage from "@/pages/PersonImagesPage.vue"
+import AlbumsCreate from'@/pages/createA.vue'
+import AlbumImagesPage from'@/pages/AlbumImagesPage.vue';
+import SearchPage from '@/pages/SearchPage'
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HelloWorld
+    component: HomePage
   },
   {
     path: '/search',
     name: 'search',
-    component: () => import( '../views/SearchView.vue')
+    component: SearchPage
   },
   {
     path:'/person/:pid',
     name:"person",
-    component:PersonImages
+    component:PersonImagesPage
+  }
+  ,
+  {
+    path:'/AlbumCreate',
+    name:"album",
+    component:AlbumsCreate
+
+  },
+  {
+    path:'/Album/:aid',
+    name:'albumname',
+    component:AlbumImagesPage
   }
 ]
 

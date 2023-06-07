@@ -37,7 +37,7 @@ def db_init():
             foreign key(img_id) references g_table(img_id) ON DELETE CASCADE
         )
     """)
-    print(cur.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall())
+    # print(cur.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall())
     conn.commit
     if conn:
         conn.close()

@@ -5,14 +5,15 @@
       <router-link to="/search">Search</router-link>
       <!-- accept=".jpg, .jpeg, .png" -->
       <input
-      ref="images" 
-      type="file"
-      id="image_uploads"
-      name="image_uploads"
-      
-      @change="upload"
-      hidden
-      multiple />
+        ref="images" 
+        type="file"
+        id="image_uploads"
+        name="image_uploads"
+        
+        @change="upload"
+        hidden
+        multiple 
+      />
       <button @click="getImages">add</button>
     </nav>
     <div></div>

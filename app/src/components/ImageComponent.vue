@@ -32,7 +32,7 @@ export default{
 
 img{
   /* border-radius: 7%; */
-  object-fit:cover;
+  object-fit:fill;
   /* display:inline-block; */
   /* object-position:unset; */
   /* object-fit:cover; */
