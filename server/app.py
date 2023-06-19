@@ -38,7 +38,8 @@ def getAllImages():
         clu_lbl = []
         cluImgs = {}
         for c in clu:
-            cur.execute(f'''select img_id from g_to_clu_rel where clu_id="{c}"''')
+            cur.execute(
+                f'''select img_id from g_to_clu_rel where clu_id="{c}"''')
             cimgs = [base+'/images/'+f[0] for f in cur.fetchall()]
             clu_lbl.append({
                 'p_id': c, 'link': (base+'/faces/'+c+'.jpeg')
@@ -173,6 +174,27 @@ def getalb():
     alb = pickle.load(file1)
     print(alb)
     return jsonify({"var": alb})
+
+
+@app.route('/delalb/', methods=['POST'])
+def delalb():
+    if request.method == 'POST':
+        data = request.json
+        file1 = open(album, 'rb')
+        d1 = pickle.load(file1)
+        print(d1[data['id']])
+        print()
+        print(type(data['imgs']))
+        r = [i for i in d1[data['id']] if i not in data['imgs']]
+        print(r)
+        if(len(r)>0):
+            d1[data['id']] = r
+        else:
+            del d1[data['id']]
+        file1.close()
+        file1 = open(album, 'wb')
+        pickle.dump(d1, file1)
+        return 'success'
 
 
 if __name__ == "__main__":
