@@ -11,7 +11,7 @@
       <div class="gal-wrapper">
         <div class="gal-Container">
           <label class="lbl" :for="'chk'+i" @click="handleLabel">
-            <img :src="s" alt="" class="gal-img">
+            <img :src="s" alt="" class="gal-img" @click=" handleImgClick">
           </label>
           <input type="checkbox" :key="i" :id="'chk'+i" v-model="selectImages" :value="s" :class="[chkboxshow?'selectImages':'selectImageshover']"
             />
