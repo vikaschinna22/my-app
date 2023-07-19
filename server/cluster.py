@@ -5,7 +5,7 @@ from PIL import Image
 import cv2
 import face_recognition
 from sklearn.cluster import DBSCAN
-from imutils import build_montages
+#from imutils import build_montages
 import shutil
 import pickle
 
@@ -52,7 +52,7 @@ def addImages(imglist):
 
 
 def cluster():
-    try:
+    #try:
         shutil.rmtree('faces')	
         os.mkdir('faces')
         data = None
@@ -138,8 +138,8 @@ def cluster():
         con.commit()
         con.close()
         make_id()
-    except:
-        print('clu error')
+    #except:
+        #print('clu error')
 
 
 cluster()

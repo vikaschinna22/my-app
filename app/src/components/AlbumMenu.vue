@@ -3,7 +3,7 @@
         <h3>Albums</h3>
         <div class="menu" >
             <div class="roundit-c">
-                <div class="item-create" @click="handleClick"><span>+</span></div>
+                <div class="item-create" @click="handleClick"><span><img src=@/assets/plus.png style="max-width: 100%;"/></span></div>
             </div>
             <div v-for="(s,v,i) in albumname" :key="i" class="item"  >
                 <img :src="'http://localhost:5000/images/'+s.at(-1)" class="item-img"
@@ -66,9 +66,11 @@ h3{
     height: 170px;
     width: 170px;
     border-radius: 15px;
-    background-color: gray;
+    /* background-color:white; */
     color: black;
     opacity: 0.7;
+
+    
 
 }
 
@@ -103,5 +105,6 @@ button {
 }
 .roundit-c{
     border-radius: 10px;
-}
+} 
+
 </style>

@@ -151,7 +151,7 @@ export default {
 }
 
  .gallery{
-    margin-top: 10px;
+    margin-top: 50px;
     display: flex;
     flex-wrap:wrap;
     gap:20px;  

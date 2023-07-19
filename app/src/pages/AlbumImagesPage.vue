@@ -161,7 +161,21 @@ export default {
   width:250px;
   height:300px;
   text-align: center;
+  padding:15px;
 }
+
+
+/* .gal-img:hover{
+
+    background-color: rgb(124, 126, 126);
+    box-shadow: 
+    1px 1px #373737,
+    2px 2px #373737,
+    3px 3px #373737,
+    4px 4px #373737,
+    5px 5px #373737,
+    6px 6px #373737,
+} */
 .NavContainer{
   background-color: white;
   padding: 10px;
@@ -185,7 +199,7 @@ export default {
   -webkit-transform: scale(1.5); /* Safari 3-8 */
   transform: scale(1.5); 
 }
-.gallery{
+/* .gallery{
     position:relative;
     
     margin-top: 10px;
@@ -195,7 +209,7 @@ export default {
     gap:20px;  
     justify-content:space-evenly;
     
- }
+ } */
  
 .delNavWrapper{
   position: fixed;

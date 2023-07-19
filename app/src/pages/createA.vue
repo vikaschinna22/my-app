@@ -1,8 +1,25 @@
 <template>
-<div class ="field" id="searchform">
+<div style="display: flex;" class ="field" id="searchform">
     <form @submit="process">
-      <input type="text" v-model="name1" @change="name2" id="searchterm" required>
-      <button id="search">create</button>
+      <input type="text" style="
+                font-size: 14px;
+                border-radius: 6px;
+                line-height: 1.5;
+                padding: 5px 10px;
+                transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
+                border: 2px solid #bdbfc0;
+                color: rgb(221, 221, 225);
+                background: #dee1e2;
+                height: 20px;
+                :hover {
+                    border-color: #ccc;
+                }
+                :focus{
+                    border-color: #9147ff;
+                    background: #fff;
+                }
+                " v-model="name1" @change="name2" id="searchterm" required>
+      <button class="my-btn" id="search">Create</button>
     </form>
 </div>
 <div class="container">
@@ -179,4 +196,26 @@ label img {
   color: #fff;
   border:none;
 }
-</style>
+.my-btn {
+  margin-left: 8px;
+  width: 70px;
+  height: 30px;
+  border:none;
+  border-radius: 50px;
+  box-shadow: 3px 3px gray;
+}
+.my-btn:hover {
+  background-color:#819090;
+  transition: 0.5s;
+}
+.my-btn:focus{
+  outline-color: transparent;
+  outline-style: solid;
+  box-shadow: 0 0 0 4px ;
+  transition: 0.5s;
+
+}
+.my-btn:active{
+  background-color: dimgray;
+}
+</style> 

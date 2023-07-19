@@ -4,8 +4,12 @@
             <img src="@/assets/back.png" alt='back' class='Navicons' @click="$router.go(-1)" />
         </div>
     </div>
-    <div>
-        <img :src="link" v-for="link,i in getPersonImages" :key="i" @click="handleClick">
+    <div class="gallery">
+        <div class="gal-Container">
+            <div v-for="link,i in getPersonImages" :key="i" @click="handleClick">
+                <img :src="link"  class="gal-img">
+            </div>
+        </div>
     </div>
     <FullScreenImage v-if='fullScreenImg' :photos='getPersonImages' :Imgidx="Imgidx" :close="handleFullScreenClose"/>
 </template>
@@ -84,5 +88,19 @@ export default{
   display: flex;
   align-items: center;
 }
+.gal-img{
+  object-fit:fill;
+  width:250px;
+  height:300px;
+  text-align: center;
+  padding:15px;
+}
+.gal-Container{
+    position: relative;
+    display: flex;
+    justify-content: left;
+    flex-wrap: wrap;
+ }
 
+ 
 </style>

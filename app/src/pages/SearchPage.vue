@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="about" >
     <PeopleMenu :imgs="clusters"/>
     <AlbumMenu :albumname="albumname"/>
   </div>
@@ -28,3 +28,8 @@ export default{
   }
 }
 </script>
+<style scoped>
+.about{
+  margin-top: 50px;
+}
+</style>
