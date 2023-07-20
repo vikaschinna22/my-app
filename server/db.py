@@ -56,7 +56,7 @@ def make_id():
             continue
         uniqid.add(row[1])
         cur.execute("insert into uniq_face values(?,?,?)", row)
-    print(cur.execute("select * from uniq_face").fetchall())
+    # print(cur.execute("select * from uniq_face").fetchall())
     con.commit()
     con.close()
 

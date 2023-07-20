@@ -96,7 +96,7 @@ export default {
       }
       axios.post('http://localhost:5000/deleteImages/',data).then(res=>{
         console.log(res)
-        this.updatePhotos()
+        this.photostore.updatePhotos()
         this.handleDelBack()
       }).catch(err=>{
         console.log(err)
@@ -134,7 +134,9 @@ export default {
   z-index: 2;
 }
 .delContainer{
-  background-color: white;
+
+  background-color: rgb(255, 247, 247);
+
   opacity: 0.95;
   padding: 10px;
   z-index: 3;

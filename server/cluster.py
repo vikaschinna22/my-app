@@ -8,6 +8,8 @@ from sklearn.cluster import DBSCAN
 #from imutils import build_montages
 import shutil
 import pickle
+from sklearn.metrics import silhouette_samples, silhouette_score
+
 
 from db import *
 
@@ -35,7 +37,7 @@ def addImages(imglist):
             boxes = face_recognition.face_locations(rgb, model="hog")
 
             encodings = face_recognition.face_encodings(rgb, boxes)
-            print(boxes)
+            # print(boxes)
             d = [{"imagePath": p, "loc": box, "encoding": enc}
                  for (box, enc) in zip(boxes, encodings)]
 
@@ -52,7 +54,7 @@ def addImages(imglist):
 
 
 def cluster():
-    #try:
+    try:
         shutil.rmtree('faces')	
         os.mkdir('faces')
         data = None
@@ -66,6 +68,13 @@ def cluster():
         cluster.fit(encodings_arr)
 
         labelIDs = np.unique(cluster.labels_)
+
+        lbl = cluster.fit_predict(encodings_arr)
+
+        silhouette_vals = silhouette_samples(encodings_arr, lbl)
+        silhouette_avg = np.mean(silhouette_vals)
+        print("The average Silhouette Score is:", silhouette_avg)
+
         numUniqueFaces = len(np.where(labelIDs > -1)[0])
         # c =[]
         cnt = 0
@@ -90,20 +99,6 @@ def cluster():
                         # cv2.waitKey(0)                      
                     t.append(data_arr[i]["imagePath"])
             if(labelID != -1):
-                # print(x,y,w,h,f_idx)
-                # image = face_recognition.load_image_file(data_arr[f_idx]['imagePath'])
-                # img = Image.fromarray(image, 'RGB').copy()
-                # img_cropped = img.crop((
-                #     h,x,y,w
-                # ))
-                # img.save('')
-                # img_cropped.show()
-
-                # cv2.rectangle(img, (h, x),(y, w), (255,0,255), 2)
-                # print(img)
-                # cv2.imshow('img',img[x:w-x,y:h-y])
-                # cv2.waitKey(0)
-
                 cnt += 1
                 clu["face"+str(cnt)] = []
                 for tp in t:
@@ -138,8 +133,8 @@ def cluster():
         con.commit()
         con.close()
         make_id()
-    #except:
-        #print('clu error')
+    except:
+        print('clu error')
 
 
 cluster()

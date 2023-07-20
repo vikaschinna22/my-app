@@ -61,6 +61,7 @@ def getAllImages():
 @app.route('/deleteImages/', methods=['POST'])
 def deleteImages():
     global db_file
+    global album
     con = None
     if request.method == 'POST':
         pics = []
@@ -73,31 +74,44 @@ def deleteImages():
             clust = pickle.load(file1)
             # end
             for img in data['Images']:
-                # print(img)
-                print(cur.execute(f""" select img_id from g_table  """).fetchall())
                 cur.execute(
                     f""" delete from g_table where img_id = '{img}' """)
-                print(cur.execute(f""" select img_id from g_table  """).fetchall())
                 cur.execute(
                     f""" delete from g_to_clu_rel where img_id = '{img}' """)
-                # print(cur.execute(f'''select img_id from g_table''').fetchall())
-                # print(cur.execute(f''' select * from  g_to_clu_rel where img_id = "{img}"''').fetchall())
+                os.unlink(f"./images/{img}")
                 # deleting the entries
             con.commit()
             con.close()
-            # v changes 20-05
-            # print(len(clust))
             for path in data['Images']:
                 clust = [i for i in clust if i['imagePath'].split(
                     '/')[1] != path]
-            # print(clust)
+                print(path)
             file1.close()
-            print(len(clust))
+
             file1 = open('enc.pkl', 'wb')
             pickle.dump(clust, file1)
             file1.close()
             cluster.cluster()
             # end changes
+
+            #-------------delete in album----------------------
+            file2 = open(album, 'rb')
+            d1 = pickle.load(file2)
+            print(d1)
+            for path in data['Images']:
+                print(path)
+                for key in d1.keys():
+                    print(d1[key][0])
+                    t = [item for item in d1[key] if item!=path]
+            for key in d1.keys():
+                if(len(d1[key])<=0):
+                    del d1[key]
+            print(d1)
+            file2.close()
+            file2 = open(album, 'wb')
+            pickle.dump(d1, file2)
+
+            #-------------------------------------------------
             return 'sucess'
         except Error as e:
             print(e)
@@ -149,16 +163,15 @@ def createAlbum():
         alb = {}
         if os.path.getsize(album) > 0:
             alb = pickle.load(file1)
-        print(alb)
+        # print(alb)
         data = request.json
         for i in data['Img']:
             print(i)
-        print(data['title'])
-        print(data['title'] in alb)
+        # print(data['title'] in alb)
         if data['title'] in alb:
             return 'already exists'
         alb[data['title']] = data['Img']
-        print(album)
+        # print(album)
         file1.close()
         file1 = open(album, 'wb')
         pickle.dump(alb, file1)
@@ -172,7 +185,7 @@ def getalb():
             pickle.dump({}, file)
     file1 = open(album, 'rb')
     alb = pickle.load(file1)
-    print(alb)
+    # print(alb)
     return jsonify({"var": alb})
 
 

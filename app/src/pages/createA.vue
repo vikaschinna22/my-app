@@ -8,7 +8,7 @@
                 padding: 5px 10px;
                 transition: box-shadow 100ms ease-in, border 100ms ease-in, background-color 100ms ease-in;
                 border: 2px solid #bdbfc0;
-                color: rgb(221, 221, 225);
+                color: black;
                 background: #dee1e2;
                 height: 20px;
                 :hover {
@@ -77,7 +77,7 @@ export default{
                 return;
             if(this.selImg==null || this.selImg.length==0)
                 return;
-            console.log(this.name1)
+            // console.log(this.name1)
             const Ids = this.selImg.map((item) => {
                 const ele = item.split('/')
                 // console.log(ele)
@@ -89,14 +89,19 @@ export default{
                 Img:Ids
             }
             await axios.post('http://localhost:5000/createAlbum/',data)
+            this.photostore.updatePhotos()
             router.push('/search')
         }
     }
 }
 </script>
 <style scoped>
+#searchform{
+  margin-top: 50px;
+}
 input[type="checkbox"] {
   display: none;
+  color: black;
 }
 
 label {
@@ -171,9 +176,6 @@ label img {
     padding-left: 25em;
   width:500px;
   flex-direction:row;
-  /* -moz-box-shadow:    0px 0px 2px 0px rgba(0,0,0,0.2);
-  -webkit-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.2);
-  box-shadow:         0px 0px 2px 0px rgba(0,0,0,0.2); */
 }
 
 .field>input[type=text],

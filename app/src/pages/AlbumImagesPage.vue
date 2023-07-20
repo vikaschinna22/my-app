@@ -40,6 +40,7 @@ export default {
     beforeMount() {
         const route = this.$route.path.split("/").filter(r => r != "");
         const f_id = route.at(-1);
+        this.f_id = f_id
         if (!this.albumname[f_id])
             router.push("/search");
     },
@@ -60,7 +61,8 @@ export default {
             selimg:[],
             chkboxshow:false,
             photos:[],
-            updatePhotos
+            updatePhotos,
+            f_id:null,
         };
     },
     watch:{
@@ -95,10 +97,12 @@ export default {
                 id:this.myfunc
             }
             console.log(data)
-            await axios.post('http://localhost:5000/delalb/',data).then(res=>{
+            await axios.post('http://localhost:5000/delalb/',data).then(async(res)=>{
                 res
                 this.selimg=[]
-                this.updatePhotos()
+                await this.updatePhotos()
+                if (!this.albumname[this.f_id])
+                    router.push("/search")
                 this.show=false
             }).catch(err=>{
                 console.log(err)
@@ -128,7 +132,6 @@ export default {
         },
         handleFullScreenClose(){
             this.fullScreenImg = false
-            //this.show=true;
             this.photos=[]
         },
     },
@@ -141,11 +144,10 @@ export default {
   height: 30px;
   width: 30px;
   object-fit: cover;
-  /* margin: 0 10px ; */
 }
 .Navicons:hover{
-    -ms-transform: scale(1.5); /* IE 9 */
-    -webkit-transform: scale(1.5); /* Safari 3-8 */
+    -ms-transform: scale(1.5); 
+    -webkit-transform: scale(1.5); 
     transform: scale(1.5); 
 }
 
@@ -165,24 +167,12 @@ export default {
 }
 
 
-/* .gal-img:hover{
-
-    background-color: rgb(124, 126, 126);
-    box-shadow: 
-    1px 1px #373737,
-    2px 2px #373737,
-    3px 3px #373737,
-    4px 4px #373737,
-    5px 5px #373737,
-    6px 6px #373737,
-} */
 .NavContainer{
-  background-color: white;
+  background-color: rgb(255, 247, 247);
   padding: 10px;
   z-index: 3;
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
 }
 
 .gal-Container{
@@ -199,19 +189,10 @@ export default {
   -webkit-transform: scale(1.5); /* Safari 3-8 */
   transform: scale(1.5); 
 }
-/* .gallery{
-    position:relative;
-    
-    margin-top: 10px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap:wrap;
-    gap:20px;  
-    justify-content:space-evenly;
-    
- } */
+
  
 .delNavWrapper{
+    
   position: fixed;
   top: 0%;
   width: 100%;
@@ -220,7 +201,9 @@ export default {
   
 }
 .delContainer{
-  background-color: white;
+
+  background-color: rgb(255, 247, 247);
+
   opacity: 0.95;
   padding: 10px;
   z-index: 3;
@@ -250,5 +233,10 @@ export default {
  }
  .gal-Container{
     position: relative;
+ }
+ .gallery{
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
  }
 </style>

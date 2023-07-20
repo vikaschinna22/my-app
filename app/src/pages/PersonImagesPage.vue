@@ -82,7 +82,7 @@ export default{
 }
 
 .NavContainer{
-  background-color: white;
+  background-color: rgb(255, 247, 247);
   padding: 10px;
   z-index: 3;
   display: flex;
@@ -101,6 +101,8 @@ export default{
     justify-content: left;
     flex-wrap: wrap;
  }
-
+.gallery{
+    margin-top: 50px;
+}
  
 </style>
