@@ -79,6 +79,13 @@ h3{
     height: 170px;
     width: 170px;
     border-radius: 15px;
+
+    -moz-box-shadow: 10px 10px 5px #ccc;
+  -webkit-box-shadow: 10px 10px 5px #ccc;
+  box-shadow: 10px 10px 5px #ccc;
+  -moz-border-radius:25px;
+  -webkit-border-radius:25px;
+  border-radius:25px
 }
 /* img{
     height: inherit;

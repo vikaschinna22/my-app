@@ -150,6 +150,13 @@ export default {
   width:250px;
   height:300px;
   text-align: center;
+
+  -moz-box-shadow: 10px 10px 5px #ccc;
+  -webkit-box-shadow: 10px 10px 5px #ccc;
+  box-shadow: 10px 10px 5px #ccc;
+  -moz-border-radius:25px;
+  -webkit-border-radius:25px;
+  border-radius:25px
 }
 
  .gallery{
