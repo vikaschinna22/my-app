@@ -172,6 +172,10 @@ export default {
   -webkit-border-radius:25px;
   border-radius:25px
 }
+.gal-img:hover{
+    transform: scale(1.1);
+    transition:0.3s ease-in-out;
+}
 
 
 .NavContainer{

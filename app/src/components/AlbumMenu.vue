@@ -87,6 +87,10 @@ h3{
   -webkit-border-radius:25px;
   border-radius:25px
 }
+.item-img:hover{
+    transform:scale(1.1);
+    transition:0.3s ease-in-out;
+}
 /* img{
     height: inherit;
     width: 100%;

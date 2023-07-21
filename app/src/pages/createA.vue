@@ -142,6 +142,17 @@ label img {
   width: 100px;
   transition-duration: 0.2s;
   transform-origin: 50% 50%;
+
+  -moz-box-shadow: 10px 10px 5px #ccc;
+  -webkit-box-shadow: 10px 10px 5px #ccc;
+  box-shadow: 10px 10px 5px #ccc;
+  -moz-border-radius:25px;
+  -webkit-border-radius:25px;
+  border-radius:25px
+}
+.label img:hover{
+  transform:scale(1.1);
+    transition:0.3s ease-in-out;
 }
 
 :checked+label {
