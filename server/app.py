@@ -95,18 +95,21 @@ def deleteImages():
             # end changes
 
             #-------------delete in album----------------------
+            # print("dlete in album \n\n\n\n\n")
             file2 = open(album, 'rb')
             d1 = pickle.load(file2)
-            print(d1)
+            # print(d1)
+            # print(f'{data["Images"]} \n \n \n \n')
             for path in data['Images']:
                 print(path)
                 for key in d1.keys():
-                    print(d1[key][0])
+                    # print(d1[key][0])
                     t = [item for item in d1[key] if item!=path]
-            for key in d1.keys():
+                    d1[key] = t
+            for key in list(d1.keys()):
                 if(len(d1[key])<=0):
                     del d1[key]
-            print(d1)
+            # print(d1)
             file2.close()
             file2 = open(album, 'wb')
             pickle.dump(d1, file2)
